@@ -3,7 +3,7 @@
 Single-page portfolio built with Next.js (App Router), Tailwind CSS v4 and Motion. It is exported as a fully static site.
 
 ## Development
-
+ 
 ```bash
 npm install
 npm run dev        # http://localhost:3000
