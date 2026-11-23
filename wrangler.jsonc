@@ -1,0 +1,13 @@
+// Static-assets-only Worker: serves the `next build` export in out/ as plain files.
+// Having this file stops Cloudflare from auto-configuring the project with OpenNext,
+// which needs a Next.js server build and fails on `output: "export"`.
+{
+  // Must match the Worker's name in the Cloudflare dashboard
+  "name": "zdravko-borisov",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./out",
+    // Serve out/404.html (with a 404 status) for unknown paths
+    "not_found_handling": "404-page"
+  }
+}
