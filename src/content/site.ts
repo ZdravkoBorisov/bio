@@ -1,8 +1,7 @@
 export const site = {
   name: "Zdravko Borisov",
   role: "Software Engineer",
-  // TODO: set NEXT_PUBLIC_SITE_URL in the deployment environment
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://zdravkoborisov.site",
   description:
     "Software engineer building and operating production backend systems — .NET microservices, event-driven messaging and AWS infrastructure.",
 } as const;
