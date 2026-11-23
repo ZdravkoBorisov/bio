@@ -1,0 +1,292 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink-950: #06070a;
+  --color-ink-900: #0a0c10;
+  --color-ink-850: #0e1116;
+  --color-ink-800: #13171d;
+
+  --color-fg: #e9ecef;
+  --color-fg-muted: #b9c0c8;
+  --color-fg-subtle: #9aa2ac;
+  --color-fg-faint: #6b737d;
+
+  --color-line: rgb(255 255 255 / 0.07);
+  --color-line-strong: rgb(255 255 255 / 0.13);
+
+  --color-accent: #7cc4ff;
+  --color-accent-dim: #3d79b0;
+  --color-accent-glow: rgb(124 196 255 / 0.16);
+  --color-accent-2: #a5b0ff;
+  --color-warn: #e6b86a;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-grid-in: grid-in 1.2s var(--ease-out-expo) both;
+  --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
+
+  @keyframes grid-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgb(124 196 255 / 0.45); }
+    50% { box-shadow: 0 0 0 5px rgb(124 196 255 / 0); }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Scale the whole type system up on very large displays */
+  @media (min-width: 2200px) {
+    html { font-size: 18px; }
+  }
+  @media (min-width: 3000px) {
+    html { font-size: 21px; }
+  }
+
+  body {
+    background: var(--color-ink-950);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgb(124 196 255 / 0.25);
+    color: var(--color-fg);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .container-page { padding-inline: 2rem; }
+  }
+  @media (min-width: 1024px) {
+    .container-page { padding-inline: 3rem; }
+  }
+
+  .label-mono {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-fg-subtle);
+  }
+
+  .hairline {
+    border-color: var(--color-line);
+  }
+
+  .surface {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.025), rgb(255 255 255 / 0.01));
+    border: 1px solid var(--color-line);
+  }
+
+  .text-gradient {
+    background: linear-gradient(180deg, #f3f5f7 0%, #d3d9df 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Keyframes referenced from inline styles / arbitrary values */
+@keyframes lane-travel {
+  from { left: -3rem; }
+  to { left: 100%; }
+}
+
+@keyframes scroll-hint {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(300%); }
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes scan {
+  from { left: 0; }
+  to { left: calc(100% - 6px); }
+}
+
+@keyframes cell-blink {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+/* Fixed decorative layers */
+.backdrop-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%);
+}
+
+.backdrop-noise {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+}
+
+.spotlight {
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 30%),
+    rgb(124 196 255 / 0.06),
+    transparent 70%
+  );
+}
+
+/* -- 3D & light effects ------------------------------------------------ */
+
+/* Slow aurora drifting behind everything; radial gradients instead of blur filters keep it cheap */
+.aurora {
+  position: absolute;
+  width: 70vmax;
+  height: 70vmax;
+  border-radius: 9999px;
+  will-change: transform;
+}
+.aurora-a {
+  top: -30vmax;
+  left: -15vmax;
+  background: radial-gradient(circle, rgb(124 196 255 / 0.075), transparent 62%);
+  animation: aurora-drift-a 28s ease-in-out infinite alternate;
+}
+.aurora-b {
+  top: -20vmax;
+  right: -25vmax;
+  background: radial-gradient(circle, rgb(165 176 255 / 0.06), transparent 62%);
+  animation: aurora-drift-b 34s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift-a {
+  to { transform: translate3d(22vmax, 14vmax, 0) scale(1.15); }
+}
+@keyframes aurora-drift-b {
+  to { transform: translate3d(-18vmax, 24vmax, 0) scale(0.9); }
+}
+
+/* Receding grid floor */
+.perspective-grid {
+  perspective: 520px;
+  perspective-origin: 50% 0%;
+  mask-image: linear-gradient(to top, transparent 0%, black 30%, transparent 92%);
+}
+.perspective-grid-floor {
+  position: absolute;
+  inset: 0 -60%;
+  height: 220%;
+  transform-origin: 50% 0%;
+  transform: rotateX(72deg);
+  background-image:
+    linear-gradient(to right, rgb(124 196 255 / 0.16) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(124 196 255 / 0.16) 1px, transparent 1px);
+  background-size: 56px 56px;
+  animation: floor-travel 3.2s linear infinite;
+}
+@keyframes floor-travel {
+  to { background-position: 0 56px; }
+}
+
+/* Light that travels around an element border. Parent needs a border-radius. */
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.beam {
+  position: relative;
+}
+.beam::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0 62%,
+    rgb(124 196 255 / 0.9) 80%,
+    rgb(165 176 255 / 0.8) 90%,
+    transparent 100%
+  );
+  /* Longhands only: the shorthand gets collapsed at build time and loses the composite */
+  mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  mask-clip: content-box, border-box;
+  mask-composite: exclude;
+  animation: beam-spin 5s linear infinite;
+  pointer-events: none;
+  transition: opacity 500ms;
+}
+.beam-hover::before {
+  opacity: 0;
+}
+.beam-hover:hover::before {
+  opacity: 1;
+}
+@keyframes beam-spin {
+  to { --beam-angle: 360deg; }
+}
+
+/* Dark outline behind SVG labels so they stay legible over the globe */
+.svg-halo {
+  paint-order: stroke;
+  stroke: var(--color-ink-950);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+
+/* Slow light sweep across text */
+.text-shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--color-fg-muted) 0%,
+    var(--color-fg-muted) 40%,
+    var(--color-accent) 50%,
+    var(--color-fg-muted) 60%,
+    var(--color-fg-muted) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  60%, 100% { background-position: 0% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
