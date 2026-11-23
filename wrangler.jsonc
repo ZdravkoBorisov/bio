@@ -3,7 +3,7 @@
 // which needs a Next.js server build and fails on `output: "export"`.
 {
   // Must match the Worker's name in the Cloudflare dashboard
-  "name": "zdravko-borisov",
+  "name": "bio",
   "compatibility_date": "2026-11-01",
   "assets": {
     "directory": "./out",
